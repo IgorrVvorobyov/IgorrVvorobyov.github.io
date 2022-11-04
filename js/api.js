@@ -2,18 +2,28 @@ const API_KEY = '2c46288716a18fb7aadcc2a801f3fc6b';
 const URL = 'https://api.themoviedb.org/3';
 const REGION = 'en-US';
 
+// retrieve data from the api
 async function load(url, queryParams) {
-    const searchParams = new URLSearchParams(queryParams)
-    const newUrl = `${url}?${searchParams.toString()}`;
+    try {
+        const searchParams = new URLSearchParams(queryParams)
+        const newUrl = `${url}?${searchParams.toString()}`;
 
-    const resp = await fetch(newUrl, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-    const respData = await resp.json();
-    console.log(respData);
-    return respData;
+        const resp = await fetch(newUrl, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (resp.ok) {
+            const respData = await resp.json();
+            return respData;
+        }
+
+        throw new Error(resp.status + '');
+
+    } catch (err) {
+        alert(err.message);
+    }
 }
 
 export async function getPopular() {
